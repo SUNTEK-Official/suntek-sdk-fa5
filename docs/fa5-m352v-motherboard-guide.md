@@ -5,9 +5,7 @@ This repository contains the developer reference materials for the **FA5** produ
 ## Package Contents
 
 - `FA5 API Documentation-en.pdf`: English API documentation for the Uniwin RK3562 Android 13 platform.
-- `FA5 API -zh.pdf`: Chinese API documentation.
 - `FA5-M352-V Motherboard User Manual - en.docx`: English motherboard usage notes for GPIO-driven peripherals and input detection.
-- `FA5-M352-V .txt`: Chinese text version of the motherboard notes.
 - `rk3562-android13-uniwinApi-1.0.1.jar`: Android SDK library used to access the platform APIs from applications.
 
 ## Product Overview
@@ -198,7 +196,6 @@ This README was prepared from the documents currently present in this folder:
 
 - `FA5 API Documentation-en.pdf`
 - `FA5-M352-V Motherboard User Manual - en.docx`
-- `FA5-M352-V .txt`
 - `rk3562-android13-uniwinApi-1.0.1.jar`
 
 
@@ -206,71 +203,126 @@ This README was prepared from the documents currently present in this folder:
 
 # SUNTEK FA5 M352-V Motherboard & GPIO Guide
 
-M352-V motherboard
+### M352-V motherboard
+
 Instructions for use of relay/tricolor lamp/infrared fill light/IO port output/doorbell output functions
-Instructions for using the door open button/door magnetic detection function
-///////////////////////////////////////////////////////////////////////
+
+### Instructions for using the door open button/door magnetic detection function
+
+---
+
 M352-V Mainboard Relay/Tri-color LED/Infrared Complementary Light/IO Port Output/Doorbell Output Function User Manual:
+
 The GPIO output ports used by these functions and their corresponding GPIO names are as follows:
-Relay control I/O:
+
+### Relay control I/O:
+
 gpio3_d7, name is "relay"
-Tri-color LED control IO:
+
+### Tri-color LED control IO:
+
 gpio0_c4, "led1-en
+
 gpio0_c0, "led2-en
+
 gpio0_a6, "led3-en
-Infrared fill light control IO:
+
+### Infrared fill light control IO:
+
 gpio4_b6, "led-ir-en
-2-channel I/O output:
+
+### 2-channel I/O output:
+
 gpio3_d4, "gpio1"
+
 gpio3_d5, "gpio2"
-Doorbell output:
+
+### Doorbell output:
+
 gpio1_d0, "doorbell-out
-The corresponding code usage method is as follows:
-See the document "Uniwin-rk356x_Android11 System API Documentation.pdf"
 
-## 1. Import uniwinapi.jar into the libs directory of your project;
+### The corresponding code usage method is as follows:
 
+### See the document "Uniwin-rk356x_Android11 System API Documentation.pdf"
 
-## 2. Import android.uniwin.Gpio;
+1. Import uniwinapi.jar into the libs directory of your project;
 
+2. Import android.uniwin.Gpio;
 
-## 3. Detailed I/O instructions:
+### 3. Detailed I/O instructions:
 
-a. Example of reading I/O port status:
-int value = readGpio("gpio0"); // Reads the value of gpio1; low level returns 0, high level returns 1.
-b. Example of writing I/O port status:
+### a. Example of reading I/O port status:
+
+int value = readGpio("gpio0");  // Reads the value of gpio1; low level returns 0, high level returns 1.
+
+### b. Example of writing I/O port status:
+
 Gpio.writeGpio("gpio0",0);
+
 Gpio.writeGpio("gpio0",1);
-Following the method described above,
-For example, to set the output relay I/O to high: `Gpio.writeGpio("relay",1);`
-For example, to set the output infrared fill light to low: `Gpio.writeGpio("led-ir-en",1);`
-///////////////////////////////////////////////////////////////////////
-M352-V Mainboard Door Opening Button/Door Magnetic Detection Function User Manual:
-The GPIO used by these functions and the defined IO names are as follows:
-Door opening button:
+
+### Following the method described above,
+
+### For example, to set the output relay I/O to high: `Gpio.writeGpio("relay",1);`
+
+### For example, to set the output infrared fill light to low: `Gpio.writeGpio("led-ir-en",1);`
+
+---
+
+### M352-V Mainboard Door Opening Button/Door Magnetic Detection Function User Manual:
+
+### The GPIO used by these functions and the defined IO names are as follows:
+
+### Door opening button:
+
 gpio0_a4, "door-open"
-Door magnetic detection:
+
+### Door magnetic detection:
+
 gpio3_a7, "door-det"
-The door opening button and door magnetic sensor function are used as follows:
+
+### The door opening button and door magnetic sensor function are used as follows:
+
 The API usage instructions are as follows; for the specific demo source code, please refer to the compressed file "UniwinIOInput.rar".
+
 public void onReceive(Context context, Intent intent) {
+
 // TODO Auto-generated method stub
+
 if(intent.getAction().equals("com.uniwin.io.input")){
+
 String ioName =intent.getStringExtra("ioname");
+
 int state = intent.getIntExtra("state", 0);
+
 String text = "Received io.input event, ioname:"+ioName+", state:"+state+"!";
+
 Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+
 }
+
 }
+
 (1) When the value obtained by ioname is "door-open", it means that the signal to open the door button has been received.
+
 The state value represents the input value detected by the door opening button. 1 indicates a high level is detected, and 0 indicates a low level. The default hardware setting is a high level.
+
 If you want to use polling to obtain the status of the door open button's I/O port, you can directly read the following path:
+
 "/sys/class/switch/gpio_pin_0/state"
+
 (2) When the value obtained by ioname is "door-det", it means that a door magnetic sensor signal has been received.
+
 The state value represents the input value detected by the door magnetic sensor I/O port. 1 indicates a high level is detected, and 0 indicates a low level. The default hardware level is high.
+
 To obtain the status of the door magnetic sensor I/O port using a polling method, simply read the following path:
+
 "/sys/class/switch/gpio_pin_1/state"
-///////////////////////////////////////////////////////////////////////
+
+---
+
 // Wiegand input: gpio1_b5/gpio1_b6
+
 // Wiegand output: gpio1_b3/gpio1_b4
-///////////////////////////////////////////////////////////////////////
+
+---
