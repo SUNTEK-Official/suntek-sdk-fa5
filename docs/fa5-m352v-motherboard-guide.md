@@ -253,13 +253,16 @@ gpio1_d0, "doorbell-out
 
 ### a. Example of reading I/O port status:
 
+```java
 int value = readGpio("gpio0");  // Reads the value of gpio1; low level returns 0, high level returns 1.
+```
 
 ### b. Example of writing I/O port status:
 
+```java
 Gpio.writeGpio("gpio0",0);
-
 Gpio.writeGpio("gpio0",1);
+```
 
 ### Following the method described above,
 
@@ -285,23 +288,17 @@ gpio3_a7, "door-det"
 
 The API usage instructions are as follows; for the specific demo source code, please refer to the compressed file "UniwinIOInput.rar".
 
+```java
 public void onReceive(Context context, Intent intent) {
-
-// TODO Auto-generated method stub
-
-if(intent.getAction().equals("com.uniwin.io.input")){
-
-String ioName =intent.getStringExtra("ioname");
-
-int state = intent.getIntExtra("state", 0);
-
-String text = "Received io.input event, ioname:"+ioName+", state:"+state+"!";
-
-Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-
+    // TODO Auto-generated method stub
+    if(intent.getAction().equals("com.uniwin.io.input")){
+        String ioName =intent.getStringExtra("ioname");
+        int state = intent.getIntExtra("state", 0);
+        String text = "Received io.input event, ioname:"+ioName+", state:"+state+"!";
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    }
 }
-
-}
+```
 
 (1) When the value obtained by ioname is "door-open", it means that the signal to open the door button has been received.
 
@@ -309,7 +306,7 @@ The state value represents the input value detected by the door opening button. 
 
 If you want to use polling to obtain the status of the door open button's I/O port, you can directly read the following path:
 
-"/sys/class/switch/gpio_pin_0/state"
+`/sys/class/switch/gpio_pin_0/state`
 
 (2) When the value obtained by ioname is "door-det", it means that a door magnetic sensor signal has been received.
 
@@ -317,12 +314,13 @@ The state value represents the input value detected by the door magnetic sensor 
 
 To obtain the status of the door magnetic sensor I/O port using a polling method, simply read the following path:
 
-"/sys/class/switch/gpio_pin_1/state"
+`/sys/class/switch/gpio_pin_1/state`
 
 ---
 
+```java
 // Wiegand input: gpio1_b5/gpio1_b6
-
 // Wiegand output: gpio1_b3/gpio1_b4
+```
 
 ---
